@@ -4,6 +4,6 @@
 Demo Video: <URL>
 
 ## GitHub Repository
-GitHub Repo: <URL>
+GitHub Repo: <https://github.com/Nyx1325/FinalProject_LE.git>
 
 ## Description
