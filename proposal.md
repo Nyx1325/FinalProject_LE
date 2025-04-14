@@ -1,4 +1,4 @@
-# Motorcycle **Rev Up**
+# Motorcycle *Rev Up*
 
 ## Repository
 <https://github.com/Nyx1325/FinalProject_LE.git>
