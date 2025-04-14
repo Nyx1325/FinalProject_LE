@@ -4,7 +4,7 @@
 <https://github.com/Nyx1325/FinalProject_LE.git>
 
 ## Description
-1-2 sentence description of what it will do and how it relevant to media and digital arts.
+Similar to the Tron arcade game *Lightcycle*, it will be utilizing particle trails following the motorcycles in a modern parking lot. To win, the player must avoid the opposing trail while succeeding in traping the cpu into a trail.
 
 ## Features
 - Particle trail
@@ -15,7 +15,7 @@
 	- Each restart or new window, the obstacles will be in different locations following the grid layout by having random function based on x & y points on specific collumns.
 
 ## Challenges
-- Add some sort of collision aspect when player hits opposing smoke trail and bounce when hitting an obstacle
+- Add some sort of collision aspect when player hits opposing/own smoke trail and bounce when hitting an obstacle
 - See how to alter the randomization for CPU movement & obstacle placement.
 - See how to keep the particle trail within the grid patterns to show clear path of both characters
 - Adding a Game Over/Winner title based off a collision
@@ -23,7 +23,7 @@
 
 ## Outcomes
 Ideal Outcome:
-- Player/CPU moves motorcycles that leaves a smoke trail based on direction & if either one collides with the trail, it will lead to a Game Over/Winner title with a restart button. With each restart/new window, obstacles will change locations and player/cpu will bounce if hitting them.
+- Player/CPU moves motorcycles that leaves a smoke trail based on direction & if either one collides with a trail, it will lead to a Game Over/Winner title with a restart button. With each restart/new window, obstacles will change locations and player/cpu will bounce if hitting them.
 
 Minimal Viable Outcome:
 - Player/CPU moves motorcycles that leaves a smoke trail based on direction & if either collides with the trail, the game will stop & restart itself. Obstacles will be in fixed locations & if the player/cpu hits them, they will not be able to move over or under the obstacle making them go around it.
@@ -38,6 +38,6 @@ Minimal Viable Outcome:
   1. Randomize the motion of CPU motorcyle
   2. Particle trails & Collisions
 
-- Week N (Final)
+- Week 3 (Final)
   1. Randomize obstcales & Game Over/Winner & Restart
   2. Fix any bugs & Optimize
