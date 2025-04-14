@@ -8,16 +8,16 @@
 
 ## Features
 - Particle trail
+	- Same as we've learn but alter the shape & make it follow the motorcyles by adding the start point on both individualy. Connecting it to the grid layout in order to keep them within a clear path. Also, avoid the dead function to keep the particles in place without fading them or deleting before the end of the game.
+- Collision
 	- Short explaination of how it will be executed.
-- Feature 2
-	- Short explaination of how it will be executed.
-- Feature N 
+- Feature 
 	- Short explaination of how it will be executed.
 
 ## Challenges
-- Add some sort of collision aspect
+- Add some sort of collision aspect when player hits opposing smoke trail.
 - See how to alter the randomization for CPU movement.
-- 
+- See how to keep the particle trail within the grid patterns to show clear path of both characters
 
 ## Outcomes
 Ideal Outcome:
