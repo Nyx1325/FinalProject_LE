@@ -1,4 +1,4 @@
-# Motorcycle (Rev Up)
+# Motorcycle **Rev Up**
 
 ## Repository
 <https://github.com/Nyx1325/FinalProject_LE.git>
@@ -23,10 +23,10 @@
 
 ## Outcomes
 Ideal Outcome:
-- 
+- Player/CPU moves motorcycles that leaves a smoke trail based on direction & if either one collides with the trail, it will lead to a Game Over/Winner title with a restart button. With each restart/new window, obstacles will change locations and player/cpu will bounce if hitting them.
 
 Minimal Viable Outcome:
-- Briefly describe the bare essential for a good working outcome?
+- Player/CPU moves motorcycles that leaves a smoke trail based on direction & if either collides with the trail, the game will stop & restart itself. Obstacles will be in fixed locations & if the player/cpu hits them, they will not be able to move over or under the obstacle making them go around it.
 
 ## Milestones
 
