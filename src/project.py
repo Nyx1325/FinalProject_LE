@@ -11,10 +11,10 @@ def main():
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Rev Up!")
-    parking = pygame.image.load("background.jpg")
-    motorcycle_opt = pygame.image.load("oponent.png")
+    parking = pygame.image.load("parkinglot.jpg")
+    motorcycle_opt = pygame.image.load("green motorcycle.png")
     opt_x, opt_y = 0, 0
-    motorcycle_player = pygame.image.load("character.png")
+    motorcycle_player = pygame.image.load("Red motorcycle.png")
     play_x, play_y = 0, 0
 
     running = True
