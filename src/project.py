@@ -1,5 +1,6 @@
 import pygame
 
+import math
 
 
 WIDTH, HEIGHT = 320, 240
@@ -13,9 +14,12 @@ def main():
     pygame.display.set_caption("Rev Up!")
     parking = pygame.image.load("parkinglot.jpg")
     motorcycle_opt = pygame.image.load("green motorcycle.png")
-    opt_x, opt_y = 0, 0
+    opt_x, opt_y = 0, -1
+
     motorcycle_player = pygame.image.load("Red motorcycle.png")
-    play_x, play_y = 0, 0
+    play_x, play_y = WIDTH // 2, HEIGHT // 2
+    angle = 0
+    speed = GRID_SIZE
 
     running = True
     while running:
@@ -24,17 +28,22 @@ def main():
                 running = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    play_x -= GRID_SIZE
+                    angle += 10 
                 elif event.key == pygame.K_RIGHT:
-                    play_x += GRID_SIZE
+                    angle -= 10
                 elif event.key == pygame.K_UP:
-                    play_y -= GRID_SIZE
+                    play_x += speed * math.cos(math.radians(angle))
+                    play_y -= speed * math.sin(math.radians(angle))
                 elif event.key == pygame.K_DOWN:
-                    play_y += GRID_SIZE
+                    play_x -= speed * math.cos(math.radians(angle))
+                    play_y += speed * math.sin(math.radians(angle))
+
+        rotated_motorcycle = pygame.transform.rotate(motorcycle_player, angle)
+        rect = rotated_motorcycle.get_rect(center=(play_x, play_y))
 
         screen.blit(parking, (0, 0))
         screen.blit(motorcycle_opt, (opt_x, opt_y))
-        screen.blit(motorcycle_player, (play_x, play_y))
+        screen.blit(rotated_motorcycle, rect.topleft)
         pygame.display.flip()
         clock.tick(60)
     pygame.quit()
