@@ -7,12 +7,6 @@ WIDTH, HEIGHT = 320, 240
 GRID_SIZE = 2 
 
 def get_random_direction():
-    DIRECTIONS = {
-    "LEFT": (-GRID_SIZE, 0),
-    "RIGHT": (GRID_SIZE, 0),
-    "UP": (0, -GRID_SIZE),
-    "DOWN": (0, GRID_SIZE)
-    }
     return random.choice(["LEFT", "RIGHT", "UP", "DOWN"])
 
 def generate_cars(count):
@@ -21,6 +15,19 @@ def generate_cars(count):
              for y in [55, 78, 100, 122, 143, 165, 186]
     ]
     return random.sample(POSSIBLE_CAR_POINTS, count) 
+
+def check_collision_and_bounce(x, y, direction, obstacles):
+    for ox, oy, _ in obstacles:
+        if abs(x - ox) < GRID_SIZE and abs(y - oy) < GRID_SIZE:
+            if direction == "LEFT":
+                return "RIGHT"
+            elif direction == "RIGHT":
+                return "LEFT"
+            elif direction == "UP":
+                return "DOWN"
+            elif direction == "DOWN":
+                return "UP"
+    return direction
 
 def main():
     pygame.init()
@@ -69,7 +76,17 @@ def main():
                     direction = "DOWN"
                     play_angle = 180
 
+        if random.random() < 0.3:
+            opt_direction = get_random_direction()
+        else:
+            if abs(play_x - opt_x) > abs(play_y - opt_y):
+                opt_direction = "LEFT" if play_x < opt_x else "RIGHT"
+            else:
+                opt_direction = "UP" if play_y < opt_y else "DOWN"
+        opt_direction = check_collision_and_bounce(opt_x, opt_y, opt_direction, obstacles)
+
         if moving:
+            direction = check_collision_and_bounce(play_x, play_y, direction, obstacles)
             if direction == "LEFT" and play_x - GRID_SIZE >= 5:
                 play_x -= GRID_SIZE
             elif direction == "RIGHT" and play_x + GRID_SIZE <= WIDTH - motorcycle_play.get_width():
