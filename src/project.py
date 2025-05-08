@@ -4,7 +4,7 @@ import math
 
 
 WIDTH, HEIGHT = 320, 240
-GRID_SIZE = 10 
+GRID_SIZE = 2 
 
 def main():
     pygame.init()
@@ -19,7 +19,8 @@ def main():
     motorcycle_player = pygame.image.load("Red motorcycle.png")
     play_x, play_y = WIDTH // 2, HEIGHT // 2
     angle = 0
-    speed = GRID_SIZE
+    direction = "UP"  # Default direction
+    moving = False  # Starts stationary
 
     running = True
     while running:
@@ -27,16 +28,30 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.KEYDOWN:
+                moving = True  # Start moving
                 if event.key == pygame.K_LEFT:
-                    angle += 10 
+                    direction = "LEFT"
+                    angle = 90  # Snap rotation to left
                 elif event.key == pygame.K_RIGHT:
-                    angle -= 10
+                    direction = "RIGHT"
+                    angle = -90  # Snap rotation to right
                 elif event.key == pygame.K_UP:
-                    play_x += speed * math.cos(math.radians(angle))
-                    play_y -= speed * math.sin(math.radians(angle))
+                    direction = "UP"
+                    angle = 0  # Facing upward
                 elif event.key == pygame.K_DOWN:
-                    play_x -= speed * math.cos(math.radians(angle))
-                    play_y += speed * math.sin(math.radians(angle))
+                    direction = "DOWN"
+                    angle = 180  # Facing downward
+
+        if moving:
+            if direction == "LEFT" and play_x - GRID_SIZE >= 0:
+                play_x -= GRID_SIZE
+            elif direction == "RIGHT" and play_x + GRID_SIZE <= WIDTH - motorcycle_player.get_width():
+                play_x += GRID_SIZE
+            elif direction == "UP" and play_y - GRID_SIZE >= 0:
+                play_y -= GRID_SIZE
+            elif direction == "DOWN" and play_y + GRID_SIZE <= HEIGHT - motorcycle_player.get_height():
+                play_y += GRID_SIZE
+
 
         rotated_motorcycle = pygame.transform.rotate(motorcycle_player, angle)
         rect = rotated_motorcycle.get_rect(center=(play_x, play_y))
