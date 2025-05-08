@@ -1,10 +1,18 @@
 import pygame
 
-import math
+import random
 
 
 WIDTH, HEIGHT = 320, 240
 GRID_SIZE = 2 
+
+POSSIBLE_CAR_POINTS = [
+    (x, y) for x in [23, 100, 143, 226, 265]
+             for y in [55, 78, 100, 122, 143, 165, 186]
+]
+
+def generate_cars(count):
+    return random.sample(POSSIBLE_CAR_POINTS, count) 
 
 def main():
     pygame.init()
@@ -12,15 +20,23 @@ def main():
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Rev Up!")
-    parking = pygame.image.load("parkinglot.jpg")
-    motorcycle_opt = pygame.image.load("green motorcycle.png")
+    parking = pygame.image.load("parking_lot.jpg")
+    blue_car = pygame.image.load("blue_car.png")
+    orange_car = pygame.image.load("orange_car.png")
+    purple_car = pygame.image.load("purple_car.png")
+
+    obstacle_cars = [blue_car, orange_car, purple_car]
+    obstacles = [(x, y, random.choice(obstacle_cars)) for x, y in generate_cars(5)]
+
+
+    motorcycle_opt = pygame.image.load("green_motorcycle.png")
     opt_x, opt_y = 0, -1
 
-    motorcycle_player = pygame.image.load("Red motorcycle.png")
+    motorcycle_player = pygame.image.load("red_motorcycle.png")
     play_x, play_y = WIDTH // 2, HEIGHT // 2
     angle = 0
-    direction = "UP"  # Default direction
-    moving = False  # Starts stationary
+    direction = "UP"
+    moving = False
 
     running = True
     while running:
@@ -28,28 +44,28 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.KEYDOWN:
-                moving = True  # Start moving
+                moving = True
                 if event.key == pygame.K_LEFT:
                     direction = "LEFT"
-                    angle = 90  # Snap rotation to left
+                    angle = 90
                 elif event.key == pygame.K_RIGHT:
                     direction = "RIGHT"
-                    angle = -90  # Snap rotation to right
+                    angle = -90
                 elif event.key == pygame.K_UP:
                     direction = "UP"
-                    angle = 0  # Facing upward
+                    angle = 0
                 elif event.key == pygame.K_DOWN:
                     direction = "DOWN"
-                    angle = 180  # Facing downward
+                    angle = 180
 
         if moving:
-            if direction == "LEFT" and play_x - GRID_SIZE >= 0:
+            if direction == "LEFT" and play_x - GRID_SIZE >= 5:
                 play_x -= GRID_SIZE
             elif direction == "RIGHT" and play_x + GRID_SIZE <= WIDTH - motorcycle_player.get_width():
                 play_x += GRID_SIZE
-            elif direction == "UP" and play_y - GRID_SIZE >= 0:
+            elif direction == "UP" and play_y - GRID_SIZE >= 7:
                 play_y -= GRID_SIZE
-            elif direction == "DOWN" and play_y + GRID_SIZE <= HEIGHT - motorcycle_player.get_height():
+            elif direction == "DOWN" and play_y + GRID_SIZE <= HEIGHT - motorcycle_player.get_width():
                 play_y += GRID_SIZE
 
 
