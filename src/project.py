@@ -29,6 +29,48 @@ def check_collision_and_bounce(play_rect, direction, obstacles):
                 return "UP"
     return direction
 
+def particle_trails(screen, play_trail, opt_trail, play_x, play_y, opt_x, opt_y):
+    play_trail.append((play_x, play_y))
+    opt_trail.append((opt_x, opt_y))
+
+    if len(play_trail) > 300:
+        play_trail.pop(0)
+    if len(opt_trail) > 300:
+        opt_trail.pop(0)
+
+    for pos in play_trail:
+        opacity = random.randint(50, 150)
+        pygame.draw.circle(screen, (180, 100, 100, opacity), pos, random.randint(2, 6))
+
+    for pos in opt_trail:
+        opacity = random.randint(50, 150)
+        pygame.draw.circle(screen, (100, 180, 100, opacity), pos, random.randint(2, 6))
+
+    if (play_x, play_y) in opt_trail:
+        return play_trail, opt_trail, "Game Over"
+    if (opt_x, opt_y) in play_trail:
+        return play_trail, opt_trail, "You Win"
+
+    return play_trail, opt_trail, None
+
+def display_endgame_text(screen, message):
+    """ Displays Game Over or You Win with a slightly transparent background """
+    font = pygame.font.Font(None, 50)
+    text = font.render(message, True, (255, 255, 255))
+    text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+
+    overlay = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
+    overlay.fill((50, 50, 50, 180))
+
+    while True:
+        screen.blit(overlay, (0, 0))
+        screen.blit(text, text_rect)
+        pygame.display.flip()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT or event.type == pygame.KEYDOWN:
+                return
+    
 def main():
     pygame.init()
 
@@ -61,7 +103,11 @@ def main():
     direction = "UP"
     moving = False
 
+    play_trail = []
+    opt_trail = []
+
     running = True
+    game_status = None
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -81,7 +127,7 @@ def main():
                     direction = "DOWN"
                     play_angle = 180
 
-        if random.random() < 0.2:
+        if random.random() < 0.1:
             opt_direction = get_random_direction()
         else:
             if abs(play_x - opt_x) > abs(play_y - opt_y):
@@ -129,6 +175,13 @@ def main():
         screen.blit(parking, (0, 0))
         for _, _, obstacle_cars, car_rect in obstacles:
             screen.blit(obstacle_cars, car_rect.topleft)
+
+        play_trail, opt_trail, game_status = particle_trails(screen, play_trail, opt_trail, play_x, play_y, opt_x, opt_y)
+
+        if game_status:
+            display_endgame_text(screen, game_status)
+            break
+
         screen.blit(rotated_opt_motorcycle, rect_opt.topleft)
         screen.blit(rotated_play_motorcycle, rect.topleft)
         pygame.display.flip()
