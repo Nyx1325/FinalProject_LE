@@ -1,17 +1,19 @@
 import pygame
 
+
 import random
 
 
-WIDTH, HEIGHT = 320, 240
-GRID_SIZE = 2 
+SCALE_FACTOR = 2
+WIDTH, HEIGHT = 320 * SCALE_FACTOR, 240 * SCALE_FACTOR
+GRID_SIZE = 2 * SCALE_FACTOR
 
 def get_random_direction():
     return random.choice(["LEFT", "RIGHT", "UP", "DOWN"])
 
 def generate_cars(count):
     POSSIBLE_CAR_POINTS = [
-    (x, y) for x in [23, 100, 143, 224, 265]
+    (x * SCALE_FACTOR, y * SCALE_FACTOR) for x in [23, 100, 143, 224, 265]
              for y in [55, 78, 100, 124, 145, 169, 194]
     ]
     return random.sample(POSSIBLE_CAR_POINTS, count) 
@@ -40,22 +42,22 @@ def particle_trails(screen, play_trail, opt_trail, play_x, play_y, opt_x, opt_y)
 
     for pos in play_trail:
         opacity = random.randint(50, 150)
-        pygame.draw.circle(screen, (180, 100, 100, opacity), pos, random.randint(2, 6))
+        pygame.draw.circle(screen, (180, 100, 100, opacity), pos, random.randint(2, 6) * SCALE_FACTOR)
 
     for pos in opt_trail:
         opacity = random.randint(50, 150)
-        pygame.draw.circle(screen, (100, 180, 100, opacity), pos, random.randint(2, 6))
+        pygame.draw.circle(screen, (100, 180, 100, opacity), pos, random.randint(2, 6) * SCALE_FACTOR)
 
     if (play_x, play_y) in opt_trail:
         return play_trail, opt_trail, "Game Over"
     if (opt_x, opt_y) in play_trail:
-        return play_trail, opt_trail, "You Win"
+        return play_trail, opt_trail, "You Win!"
 
     return play_trail, opt_trail, None
 
 def display_endgame_text(message):
     """ Displays Game Over or You Win with a slightly transparent background """
-    font = pygame.font.Font(None, 50)
+    font = pygame.font.Font(None, 50 * SCALE_FACTOR)
     text = font.render(message, True, (255, 255, 255))
     text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
     return text, text_rect
@@ -67,6 +69,7 @@ def main():
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Rev Up!")
     parking = pygame.image.load("parking_lot.jpg")
+    parking = pygame.transform.scale(parking, (WIDTH, HEIGHT))
 
     obstacle_cars = [
         pygame.image.load("blue_car.png"),
@@ -76,18 +79,21 @@ def main():
     obstacles = []
     for x, y in generate_cars(5):
         car_image = random.choice(obstacle_cars)
-        rotated_car = pygame.transform.rotate(car_image, random.choice([-90, 90]))
+        rotated_car = pygame.transform.rotate(pygame.transform.scale(car_image, (car_image.get_width() * SCALE_FACTOR, car_image.get_height() * SCALE_FACTOR)), 
+            random.choice([-90, 90]))
         car_rect = rotated_car.get_rect()
         car_rect.center = (x, y)
         obstacles.append((x, y, rotated_car, car_rect))
 
     motorcycle_opt = pygame.image.load("green_motorcycle.png")
-    opt_x, opt_y = 300, 20
+    motorcycle_opt = pygame.transform.scale(motorcycle_opt, (motorcycle_opt.get_width() * SCALE_FACTOR, motorcycle_opt.get_height() * SCALE_FACTOR))
+    opt_x, opt_y = 300 * SCALE_FACTOR, 20 * SCALE_FACTOR
     opt_angle = 0
     opt_direction = get_random_direction()
     
     motorcycle_play = pygame.image.load("red_motorcycle.png")
-    play_x, play_y = 20, 20
+    motorcycle_play = pygame.transform.scale(motorcycle_play, (motorcycle_play.get_width() * SCALE_FACTOR, motorcycle_play.get_height() * SCALE_FACTOR))
+    play_x, play_y = 20 * SCALE_FACTOR, 20 * SCALE_FACTOR
     play_angle = 0
     direction = "UP"
     moving = False
