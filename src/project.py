@@ -186,6 +186,13 @@ def main():
             screen.blit(motorcycle_opt, (opt_x, opt_y))
             screen.blit(motorcycle_play, (play_x, play_y))
             screen.blit(text_surface, text_rect)
+
+            button_font = pygame.font.Font(None, (50 * SCALE_FACTOR) // 3)
+            button_text = button_font.render("Restart", True, (0, 0, 0))
+            button_rect = button_text.get_rect(center=(WIDTH // 2, text_rect.bottom + 20 * SCALE_FACTOR))
+            pygame.draw.rect(screen, (255, 255, 255), button_rect.inflate(20, 10), border_radius=15)
+            screen.blit(button_text, button_rect)
+
             pygame.display.flip()
             waiting = True
             while waiting:
@@ -193,7 +200,10 @@ def main():
                     if event.type == pygame.QUIT:
                         waiting = False
                         running = False
-
+                    elif event.type == pygame.MOUSEBUTTONDOWN:
+                        if button_rect.collidepoint(event.pos):
+                             return main()
+                        
         screen.blit(rotated_opt_motorcycle, rect_opt.topleft)
         screen.blit(rotated_play_motorcycle, rect.topleft)
         pygame.display.flip()
