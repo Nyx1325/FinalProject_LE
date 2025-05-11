@@ -93,12 +93,12 @@ def main():
         obstacles.append((x, y, rotated_car, car_rect))
 
     motorcycle_opt = pygame.image.load("green_motorcycle.png")
-    opt_x, opt_y = WIDTH // 2, HEIGHT // 2
+    opt_x, opt_y = 300, 20
     opt_angle = 0
     opt_direction = get_random_direction()
     
     motorcycle_play = pygame.image.load("red_motorcycle.png")
-    play_x, play_y = WIDTH // 2, HEIGHT // 2
+    play_x, play_y = 20, 20
     play_angle = 0
     direction = "UP"
     moving = False
