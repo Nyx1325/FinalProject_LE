@@ -97,6 +97,7 @@ def main():
 
     running = True
     game_status = None
+    change_direction_timer = 0
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -116,13 +117,17 @@ def main():
                     direction = "DOWN"
                     play_angle = 180
 
-        if random.random() < 0.1:
-            opt_direction = get_random_direction()
-        else:
-            if abs(play_x - opt_x) > abs(play_y - opt_y):
-                opt_direction = "LEFT" if play_x < opt_x else "RIGHT"
+        change_direction_timer += 1
+        if change_direction_timer >= 15:
+            change_direction_timer = 0
+            if random.random() < 0.1:
+                opt_direction = get_random_direction()
             else:
-                opt_direction = "UP" if play_y < opt_y else "DOWN"
+                if abs(play_x - opt_x) > abs(play_y - opt_y):
+                    opt_direction = "LEFT" if play_x < opt_x else "RIGHT"
+                else:
+                    opt_direction = "UP" if play_y < opt_y else "DOWN"
+
         opt_rect = pygame.Rect(opt_x, opt_y, motorcycle_opt.get_width(), motorcycle_opt.get_height())
         play_rect = pygame.Rect(play_x, play_y, motorcycle_play.get_width(), motorcycle_play.get_height())
         opt_direction = check_collision_and_bounce(opt_rect, opt_direction, obstacles)
