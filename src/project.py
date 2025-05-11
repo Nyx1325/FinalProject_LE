@@ -53,24 +53,13 @@ def particle_trails(screen, play_trail, opt_trail, play_x, play_y, opt_x, opt_y)
 
     return play_trail, opt_trail, None
 
-def display_endgame_text(screen, message):
+def display_endgame_text(message):
     """ Displays Game Over or You Win with a slightly transparent background """
     font = pygame.font.Font(None, 50)
     text = font.render(message, True, (255, 255, 255))
     text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+    return text, text_rect
 
-    overlay = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
-    overlay.fill((50, 50, 50, 180))
-
-    while True:
-        screen.blit(overlay, (0, 0))
-        screen.blit(text, text_rect)
-        pygame.display.flip()
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT or event.type == pygame.KEYDOWN:
-                return
-    
 def main():
     pygame.init()
 
@@ -179,8 +168,20 @@ def main():
         play_trail, opt_trail, game_status = particle_trails(screen, play_trail, opt_trail, play_x, play_y, opt_x, opt_y)
 
         if game_status:
-            display_endgame_text(screen, game_status)
-            break
+            text_surface, text_rect = display_endgame_text(game_status)
+            overlay = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
+            overlay.fill((50, 50, 50, 80))
+            screen.blit(overlay, (0, 0))
+            screen.blit(motorcycle_opt, (opt_x, opt_y))
+            screen.blit(motorcycle_play, (play_x, play_y))
+            screen.blit(text_surface, text_rect)
+            pygame.display.flip()
+            waiting = True
+            while waiting:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        waiting = False
+                        running = False
 
         screen.blit(rotated_opt_motorcycle, rect_opt.topleft)
         screen.blit(rotated_play_motorcycle, rect.topleft)
