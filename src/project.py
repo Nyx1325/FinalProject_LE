@@ -11,14 +11,14 @@ def get_random_direction():
 
 def generate_cars(count):
     POSSIBLE_CAR_POINTS = [
-    (x, y) for x in [23, 100, 143, 226, 265]
-             for y in [55, 78, 100, 122, 143, 165, 186]
+    (x, y) for x in [23, 100, 143, 224, 265]
+             for y in [55, 78, 100, 124, 145, 169, 194]
     ]
     return random.sample(POSSIBLE_CAR_POINTS, count) 
 
-def check_collision_and_bounce(x, y, direction, obstacles):
-    for ox, oy, _ in obstacles:
-        if abs(x - ox) < GRID_SIZE and abs(y - oy) < GRID_SIZE:
+def check_collision_and_bounce(play_rect, direction, obstacles):
+    for _, _, _, car_rect in obstacles:
+        if play_rect.colliderect(car_rect):
             if direction == "LEFT":
                 return "RIGHT"
             elif direction == "RIGHT":
@@ -42,11 +42,16 @@ def main():
         pygame.image.load("orange_car.png"),
         pygame.image.load("purple_car.png")
     ]
-    obstacles = [(x, y, random.choice(obstacle_cars)) for x, y in generate_cars(5)]
-
+    obstacles = []
+    for x, y in generate_cars(5):
+        car_image = random.choice(obstacle_cars)
+        rotated_car = pygame.transform.rotate(car_image, random.choice([-90, 90]))
+        car_rect = rotated_car.get_rect()
+        car_rect.center = (x, y)
+        obstacles.append((x, y, rotated_car, car_rect))
 
     motorcycle_opt = pygame.image.load("green_motorcycle.png")
-    opt_x, opt_y = WIDTH // 4, HEIGHT // 4
+    opt_x, opt_y = WIDTH // 2, HEIGHT // 2
     opt_angle = 0
     opt_direction = get_random_direction()
     
@@ -76,17 +81,37 @@ def main():
                     direction = "DOWN"
                     play_angle = 180
 
-        if random.random() < 0.3:
+        if random.random() < 0.2:
             opt_direction = get_random_direction()
         else:
             if abs(play_x - opt_x) > abs(play_y - opt_y):
                 opt_direction = "LEFT" if play_x < opt_x else "RIGHT"
             else:
                 opt_direction = "UP" if play_y < opt_y else "DOWN"
-        opt_direction = check_collision_and_bounce(opt_x, opt_y, opt_direction, obstacles)
+        opt_rect = pygame.Rect(opt_x, opt_y, motorcycle_opt.get_width(), motorcycle_opt.get_height())
+        play_rect = pygame.Rect(play_x, play_y, motorcycle_play.get_width(), motorcycle_play.get_height())
+        opt_direction = check_collision_and_bounce(opt_rect, opt_direction, obstacles)
+
+        if opt_direction == "LEFT":
+                    opt_angle = 90
+        elif opt_direction == "RIGHT":
+                    opt_angle = -90
+        elif opt_direction == "UP":
+                    opt_angle = 0
+        elif opt_direction == "DOWN":
+                    opt_angle = 180
+
+        if opt_direction == "LEFT" and opt_x - GRID_SIZE >= 5:
+            opt_x -= GRID_SIZE
+        elif opt_direction == "RIGHT" and opt_x + GRID_SIZE <= WIDTH - motorcycle_opt.get_width():
+            opt_x += GRID_SIZE
+        elif opt_direction == "UP" and opt_y - GRID_SIZE >= 7:
+            opt_y -= GRID_SIZE
+        elif opt_direction == "DOWN" and opt_y + GRID_SIZE <= HEIGHT - motorcycle_opt.get_width():
+            opt_y += GRID_SIZE
 
         if moving:
-            direction = check_collision_and_bounce(play_x, play_y, direction, obstacles)
+            direction = check_collision_and_bounce(play_rect, direction, obstacles)
             if direction == "LEFT" and play_x - GRID_SIZE >= 5:
                 play_x -= GRID_SIZE
             elif direction == "RIGHT" and play_x + GRID_SIZE <= WIDTH - motorcycle_play.get_width():
@@ -102,6 +127,8 @@ def main():
         rect = rotated_play_motorcycle.get_rect(center=(play_x, play_y))
 
         screen.blit(parking, (0, 0))
+        for _, _, obstacle_cars, car_rect in obstacles:
+            screen.blit(obstacle_cars, car_rect.topleft)
         screen.blit(rotated_opt_motorcycle, rect_opt.topleft)
         screen.blit(rotated_play_motorcycle, rect.topleft)
         pygame.display.flip()
