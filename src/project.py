@@ -13,8 +13,8 @@ def get_random_direction():
 
 def generate_cars(count):
     POSSIBLE_CAR_POINTS = [
-    (x * SCALE_FACTOR, y * SCALE_FACTOR) for x in [23, 100, 143, 224, 265]
-             for y in [55, 78, 100, 124, 145, 169, 194]
+    (x * SCALE_FACTOR, y * SCALE_FACTOR) for x in [23, 100, 145, 221, 267]
+             for y in [55, 78, 101, 124, 146, 169, 193]
     ]
     return random.sample(POSSIBLE_CAR_POINTS, count) 
 
