@@ -1,7 +1,7 @@
 # PROJECT TITLE
 **Rev Up!**
 ## Demo
-Demo Video: <URL>
+Demo Video: <https://youtu.be/YvrtIYTbhl8>
 
 ## GitHub Repository
 GitHub Repo: <https://github.com/Nyx1325/FinalProject_LE.git>
